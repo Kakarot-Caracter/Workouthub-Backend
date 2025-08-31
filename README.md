@@ -25,22 +25,22 @@ El sistema gestiona toda la lógica de negocio esencial: desde el registro y la 
 
 ## ✨ Características Principales
 
--   **🔐 Autenticación Segura:** Sistema completo de registro y login basado en **JWT (JSON Web Tokens)**.
--   **👤 Gestión de Perfiles de Usuario:** Almacena datos relevantes del usuario como peso, altura y nivel de actividad.
--   **🏋️‍♀️ CRUD Completo de Rutinas:** Crea, lee, actualiza y elimina rutinas de ejercicio personalizadas.
--   **💪 CRUD Completo de Ejercicios:** Añade ejercicios detallados (series, repeticiones) a rutinas específicas.
--   **🔗 Relaciones de Datos Lógicas:** Los ejercicios pertenecen a rutinas, y las rutinas pertenecen a usuarios, con borrado en cascada para mantener la integridad.
--   **✅ Validación de Datos:** Usa `class-validator` para asegurar que los datos de entrada son correctos y seguros.
--   **🧱 Arquitectura Modular:** Organizado en módulos de NestJS (`Auth`, `Routines`, `Exercises`) para una máxima cohesión y bajo acoplamiento.
+- **🔐 Autenticación Segura:** Sistema completo de registro y login basado en **JWT (JSON Web Tokens)**.
+- **👤 Gestión de Perfiles de Usuario:** Almacena datos relevantes del usuario como peso, altura y nivel de actividad.
+- **🏋️‍♀️ CRUD Completo de Rutinas:** Crea, lee, actualiza y elimina rutinas de ejercicio personalizadas.
+- **💪 CRUD Completo de Ejercicios:** Añade ejercicios detallados (series, repeticiones) a rutinas específicas.
+- **🔗 Relaciones de Datos Lógicas:** Los ejercicios pertenecen a rutinas, y las rutinas pertenecen a usuarios, con borrado en cascada para mantener la integridad.
+- **✅ Validación de Datos:** Usa `class-validator` para asegurar que los datos de entrada son correctos y seguros.
+- **🧱 Arquitectura Modular:** Organizado en módulos de NestJS (`Auth`, `Routines`, `Exercises`) para una máxima cohesión y bajo acoplamiento.
 
 ## 🛠️ Stack Tecnológico
 
--   **Framework:** [NestJS](https://nestjs.com/) - Un marco de Node.js progresivo para construir aplicaciones eficientes y escalables.
--   **ORM:** [Prisma](https://www.prisma.io/) - ORM de próxima generación para Node.js y TypeScript.
--   **Lenguaje:** [TypeScript](https://www.typescriptlang.org/) - Superset de JavaScript que añade tipado estático.
--   **Base de Datos:** [SQLite](https://www.sqlite.org/index.html) - Base de datos SQL ligera y sin servidor, ideal para desarrollo y prototipado.
--   **Autenticación:** [Passport](http://www.passportjs.org/) con estrategia `passport-jwt`.
--   **Validación:** [class-validator](https://github.com/typestack/class-validator) y [class-transformer](https://github.com/typestack/class-transformer).
+- **Framework:** [NestJS](https://nestjs.com/) - Un marco de Node.js progresivo para construir aplicaciones eficientes y escalables.
+- **ORM:** [Prisma](https://www.prisma.io/) - ORM de próxima generación para Node.js y TypeScript.
+- **Lenguaje:** [TypeScript](https://www.typescriptlang.org/) - Superset de JavaScript que añade tipado estático.
+- **Base de Datos:** [SQLite](https://www.sqlite.org/index.html) - Base de datos SQL ligera y sin servidor, ideal para desarrollo y prototipado.
+- **Autenticación:** [Passport](http://www.passportjs.org/) con estrategia `passport-jwt`.
+- **Validación:** [class-validator](https://github.com/typestack/class-validator) y [class-transformer](https://github.com/typestack/class-transformer).
 
 ## 🚀 Primeros Pasos
 
@@ -48,8 +48,8 @@ Sigue estas instrucciones para tener una copia del proyecto corriendo en tu máq
 
 ### 1. Prerrequisitos
 
--   Node.js (v18+)
--   NPM o Yarn
+- Node.js (v18+)
+- NPM o Yarn
 
 ### 2. Instalación
 
@@ -90,11 +90,11 @@ _(La guía detallada de la API que generamos anteriormente se mantiene aquí sin
 
 WorkoutHub es un proyecto en evolución. Algunas ideas para el futuro incluyen:
 
--   [ ] Implementar roles de usuario (ej. `USER`, `ADMIN`).
--   [ ] Añadir endpoints para seguimiento de progreso (ej. registrar peso levantado en un ejercicio).
--   [ ] Integrar un sistema de logros o gamificación.
--   [ ] Subida de imágenes/videos para los ejercicios.
--   [ ] Implementar tests unitarios y de integración.
+- [ ] Implementar roles de usuario (ej. `USER`, `ADMIN`).
+- [ ] Añadir endpoints para seguimiento de progreso (ej. registrar peso levantado en un ejercicio).
+- [ ] Integrar un sistema de logros o gamificación.
+- [ ] Subida de imágenes/videos para los ejercicios.
+- [ ] Implementar tests unitarios y de integración.
 
 ## 📜 Licencia
 
