@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
+import { IsString, IsOptional, IsInt, Min, IsNotEmpty } from 'class-validator';
 
 export class CreateExerciseDto {
   @IsString()
@@ -10,17 +10,17 @@ export class CreateExerciseDto {
   description?: string;
 
   @IsInt()
-  @Min(1)
   @IsOptional()
+  @Min(0)
   sets?: number;
 
   @IsInt()
-  @Min(1)
   @IsOptional()
+  @Min(0)
   reps?: number;
 
   @IsInt()
-  @Min(1)
   @IsOptional()
-  order?: number;
+  @Min(0)
+  weight?: number;
 }

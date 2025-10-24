@@ -11,9 +11,8 @@ import {
 import { ExercisesService } from './exercises.service';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
-import { Auth } from 'src/auth/decorators/auth.decorator';
-import { GetUser } from 'src/auth/decorators/get-user.decorator';
-import { User } from '@prisma/client';
+
+import { Auth } from 'src/common/decorators/auth.decorator';
 
 @Auth()
 @Controller('routines/:routineId/exercises')
@@ -21,52 +20,40 @@ export class ExercisesController {
   constructor(private readonly exercisesService: ExercisesService) {}
 
   @Post()
-  create(
+  createExercise(
     @Param('routineId', ParseIntPipe) routineId: number,
     @Body() createExerciseDto: CreateExerciseDto,
-    @GetUser() user: User,
   ) {
-    return this.exercisesService.create(createExerciseDto, routineId, user.id);
+    return this.exercisesService.createExercise(createExerciseDto, routineId);
   }
 
   @Get()
-  findAll(
-    @Param('routineId', ParseIntPipe) routineId: number,
-    @GetUser() user: User,
-  ) {
-    return this.exercisesService.findAll(routineId, user.id);
+  findAllExercises(@Param('routineId', ParseIntPipe) routineId: number) {
+    return this.exercisesService.findAllExercises(routineId);
   }
 
   @Get(':id')
-  findOne(
+  findOneExercise(
     @Param('id', ParseIntPipe) id: number,
     @Param('routineId', ParseIntPipe) routineId: number,
-    @GetUser() user: User,
   ) {
-    return this.exercisesService.findOne(id, routineId, user.id);
+    return this.exercisesService.findOneExercise(id, routineId);
   }
 
   @Patch(':id')
-  update(
+  updateExercise(
     @Param('id', ParseIntPipe) id: number,
     @Param('routineId', ParseIntPipe) routineId: number,
     @Body() updateExerciseDto: UpdateExerciseDto,
-    @GetUser() user: User,
   ) {
-    return this.exercisesService.update(
-      id,
-      updateExerciseDto,
-      routineId,
-      user.id,
-    );
+    return this.exercisesService.updateExercise(id, updateExerciseDto);
   }
 
   @Delete(':id')
-  remove(
+  removeExercise(
     @Param('id', ParseIntPipe) id: number,
     @Param('routineId', ParseIntPipe) routineId: number,
-    @GetUser() user: User,
   ) {
-    return this.exercisesService.remove(id, routineId, user.id);
+    return this.exercisesService.removeExercise(id, routineId);
   }
 }

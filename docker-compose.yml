@@ -1,0 +1,38 @@
+services:
+  workouthub-db:
+    image: postgres:18
+    container_name: workouthub-db
+    restart: always
+    environment:
+      POSTGRES_USER: workouthub
+      POSTGRES_PASSWORD: workouthub
+      POSTGRES_DB: workouthub
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    networks:
+      - workouthub-network
+
+  workouthub-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      network: host # eliminar si no lo necesitas; no es común en compose
+    container_name: workouthub-api
+    restart: always
+    depends_on:
+      - workouthub-db
+    ports:
+      - '3001:3001'
+    env_file:
+      - .env
+    networks:
+      - workouthub-network
+
+volumes:
+  postgres_data:
+
+networks:
+  workouthub-network:
+    driver: bridge

@@ -4,6 +4,7 @@ import {
   IsInt,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsPositive,
   IsString,
   MinLength,
@@ -25,19 +26,24 @@ export class RegisterAuthDto {
 
   @IsNumber()
   @IsPositive()
+  @IsOptional()
   height: number;
 
   @IsInt()
   @IsPositive()
+  @IsOptional()
   age: number;
 
   @IsNumber()
   @IsPositive()
+  @IsOptional()
   weight: number;
 
   @IsEnum(Gender)
+  @IsOptional()
   gender: Gender;
 
   @IsEnum(WeeklyActivity)
+  @IsOptional()
   weeklyActivity: WeeklyActivity;
 }

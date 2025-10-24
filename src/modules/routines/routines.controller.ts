@@ -10,9 +10,10 @@ import {
 import { RoutinesService } from './routines.service';
 import { CreateRoutineDto } from './dto/create-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
-import { GetUser } from 'src/auth/decorators/get-user.decorator';
+
 import { User } from '@prisma/client';
-import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Auth } from 'src/common/decorators/auth.decorator';
+import { GetUser } from 'src/common/decorators/get-user.decorator';
 
 @Controller('routines')
 @Auth()
@@ -20,36 +21,37 @@ export class RoutinesController {
   constructor(private readonly routinesService: RoutinesService) {}
 
   @Post()
-  async create(
+  async createRoutine(
     @Body() createRoutineDto: CreateRoutineDto,
     @GetUser() user: User,
   ) {
-    const routine = await this.routinesService.create(
+    const routine = await this.routinesService.createRoutine(
       createRoutineDto,
       user.id,
     );
+
     return { message: 'Routine created successfully', routine };
   }
 
   @Get()
-  async findAll(@GetUser() user: User) {
-    const routines = await this.routinesService.findAll(user.id);
+  async findAllRoutines(@GetUser() user: User) {
+    const routines = await this.routinesService.findAllRoutines(user.id);
     return { message: 'Routines retrieved successfully', routines };
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number, @GetUser() user: User) {
-    const routine = await this.routinesService.findOne(+id, user.id);
+  async findOneRoutine(@Param('id') id: number, @GetUser() user: User) {
+    const routine = await this.routinesService.findOneRoutine(+id, user.id);
     return { message: 'Routine retrieved successfully', routine };
   }
 
   @Patch(':id')
-  async update(
+  async updateRoutine(
     @Param('id') id: number,
     @Body() updateRoutineDto: UpdateRoutineDto,
     @GetUser() user: User,
   ) {
-    const routine = await this.routinesService.update(
+    const routine = await this.routinesService.updateRoutine(
       +id,
       updateRoutineDto,
       user.id,
@@ -58,8 +60,8 @@ export class RoutinesController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number, @GetUser() user: User) {
-    await this.routinesService.remove(+id, user.id);
+  async removeRoutine(@Param('id') id: number, @GetUser() user: User) {
+    await this.routinesService.removeRoutine(+id, user.id);
     return { message: 'Routine deleted successfully' };
   }
 }
