@@ -1,101 +1,155 @@
 <div align="center">
   <br />
   <h1>WorkoutHub API</h1>
-  <p><strong>El motor backend para tu próxima aplicación de fitness.</strong></p>
-  <p>Una API robusta, escalable y lista para usar, construida con las mejores prácticas de la industria.</p>
-  <br />
-
-  <!-- Badges -->
   <p>
-    <img src="https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white" alt="NestJS" />
-    <img src="https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma" />
-    <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-    <img src="https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" />
-    <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT Auth" />
+    Backend profesional para gestión de rutinas y ejercicios, construido con NestJS, Prisma y PostgreSQL.
   </p>
 </div>
 
+<p align="center">
+  <img alt="NestJS" src="https://img.shields.io/badge/NestJS-11.x-red?style=for-the-badge&logo=nestjs"/>
+  <img alt="Prisma" src="https://img.shields.io/badge/Prisma-6.x-blue?style=for-the-badge&logo=prisma"/>
+  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-blue?style=for-the-badge&logo=postgresql"/>
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.x-blue?style=for-the-badge&logo=typescript"/>
+  <img alt="Docker" src="https://img.shields.io/badge/Docker-blue?style=for-the-badge&logo=docker"/>
+</p>
+
 ---
 
-## 📖 Sobre el Proyecto
+## ✨ Características
 
-**WorkoutHub** es más que una simple API; es una base sólida para construir aplicaciones de fitness completas. Ha sido diseñada pensando en la escalabilidad y la facilidad de mantenimiento, permitiendo a los desarrolladores centrarse en crear una experiencia de usuario increíble sin preocuparse por la complejidad del backend.
+- **Autenticación JWT**: Sistema seguro basado en cookies `HttpOnly`.
+- **Gestión de Usuarios**: Registro, login, logout, y gestión de perfil de usuario.
+- **Gestión de Rutinas (CRUD)**: Crea, lee, actualiza y elimina rutinas por usuario.
+- **Gestión de Ejercicios (CRUD)**: Crea, lee, actualiza y elimina ejercicios dentro de una rutina.
+- **Base de Datos Tipada**: Conexión segura y tipada a PostgreSQL usando Prisma ORM.
+- **Documentación Automática**: Endpoints documentados con Swagger (OpenAPI).
+- **Validación de Datos**: DTOs con `class-validator` para asegurar la integridad de los datos.
+- **Contenerización**: Configuración lista para usar con Docker.
 
-El sistema gestiona toda la lógica de negocio esencial: desde el registro y la autenticación segura de usuarios hasta la creación y gestión detallada de rutinas y ejercicios personalizados.
+---
 
-## ✨ Características Principales
+## 🛠️ Stack de Tecnologías
 
-- **🔐 Autenticación Segura:** Sistema completo de registro y login basado en **JWT (JSON Web Tokens)**.
-- **👤 Gestión de Perfiles de Usuario:** Almacena datos relevantes del usuario como peso, altura y nivel de actividad.
-- **🏋️‍♀️ CRUD Completo de Rutinas:** Crea, lee, actualiza y elimina rutinas de ejercicio personalizadas.
-- **💪 CRUD Completo de Ejercicios:** Añade ejercicios detallados (series, repeticiones) a rutinas específicas.
-- **🔗 Relaciones de Datos Lógicas:** Los ejercicios pertenecen a rutinas, y las rutinas pertenecen a usuarios, con borrado en cascada para mantener la integridad.
-- **✅ Validación de Datos:** Usa `class-validator` para asegurar que los datos de entrada son correctos y seguros.
-- **🧱 Arquitectura Modular:** Organizado en módulos de NestJS (`Auth`, `Routines`, `Exercises`) para una máxima cohesión y bajo acoplamiento.
+- **Framework**: [NestJS](https://nestjs.com/)
+- **ORM**: [Prisma](https://www.prisma.io/)
+- **Base de Datos**: [PostgreSQL](https://www.postgresql.org/) (vía Docker)
+- **Lenguaje**: [TypeScript](https://www.typescriptlang.org/)
+- **Autenticación**: [Passport.js](http://www.passportjs.org/) (JWT Strategy)
+- **Documentación**: [Swagger](https://swagger.io/)
 
-## 🛠️ Stack Tecnológico
+---
 
-- **Framework:** [NestJS](https://nestjs.com/) - Un marco de Node.js progresivo para construir aplicaciones eficientes y escalables.
-- **ORM:** [Prisma](https://www.prisma.io/) - ORM de próxima generación para Node.js y TypeScript.
-- **Lenguaje:** [TypeScript](https://www.typescriptlang.org/) - Superset de JavaScript que añade tipado estático.
-- **Base de Datos:** [SQLite](https://www.sqlite.org/index.html) - Base de datos SQL ligera y sin servidor, ideal para desarrollo y prototipado.
-- **Autenticación:** [Passport](http://www.passportjs.org/) con estrategia `passport-jwt`.
-- **Validación:** [class-validator](https://github.com/typestack/class-validator) y [class-transformer](https://github.com/typestack/class-transformer).
+## 🚀 Cómo Empezar
 
-## 🚀 Primeros Pasos
+Sigue estos pasos para tener una copia del proyecto funcionando localmente.
 
-Sigue estas instrucciones para tener una copia del proyecto corriendo en tu máquina local.
+### Requisitos Previos
 
-### 1. Prerrequisitos
+- [Node.js](https://nodejs.org/) (v18+ recomendado)
+- [Docker](https://www.docker.com/get-started) y Docker Compose
 
-- Node.js (v18+)
-- NPM o Yarn
-
-### 2. Instalación
+### 1. Clona el Repositorio
 
 ```bash
-# Clona el repositorio
-git clone <URL_DEL_REPOSITORIO>
-
-# Entra al directorio
+git clone https://github.com/tu-usuario/workouthub-backend.git
 cd workouthub-backend
+```
 
-# Instala las dependencias
+### 2. Configura las Variables de Entorno
+
+Crea un archivo `.env` en la raíz del proyecto y añade las siguientes variables. Puedes usar el siguiente template:
+
+```env
+# Aplicación
+PORT=3001
+JWT_SECRET=tu_super_secreto_jwt
+FRONTEND_URL=http://localhost:3000
+
+# Base de Datos (PostgreSQL con Docker)
+DATABASE_URL="postgresql://workouthub:workouthub@localhost:5432/workouthub?schema=public"
+```
+
+### 3. Inicia la Base de Datos
+
+Usa Docker Compose para levantar el contenedor de PostgreSQL:
+
+```bash
+docker-compose up -d
+```
+
+### 4. Instala Dependencias y Ejecuta las Migraciones
+
+```bash
+# Instala los paquetes de Node.js
 npm install
 
-# Crea tu archivo de variables de entorno
-# (y configúralo si es necesario)
-cp .env.example .env
+# Genera el cliente de Prisma
+npx prisma generate
 
-# Aplica las migraciones de la base de datos
+# Aplica las migraciones a la base de datos
 npx prisma migrate dev
 ```
 
-### 3. Ejecutando la Aplicación
+### 5. ¡Inicia la Aplicación!
 
 ```bash
-# Iniciar en modo desarrollo
+# Inicia el servidor en modo de desarrollo (con hot-reload)
 npm run start:dev
 ```
 
-La API estará escuchando en `http://localhost:3000`.
-
-## 📚 Guía de la API
-
-_(La guía detallada de la API que generamos anteriormente se mantiene aquí sin cambios, ya que es muy completa.)_
+¡Listo! La API estará disponible en `http://localhost:3001/api/v1` y la documentación de Swagger en `http://localhost:3001/docs`.
 
 ---
 
-## 🔮 Roadmap a Futuro
+## ⚙️ Uso de la API
 
-WorkoutHub es un proyecto en evolución. Algunas ideas para el futuro incluyen:
+- **URL Base**: `http://localhost:3001/api/v1`
+- **Documentación Interactiva**: `http://localhost:3001/docs`
 
-- [ ] Implementar roles de usuario (ej. `USER`, `ADMIN`).
-- [ ] Añadir endpoints para seguimiento de progreso (ej. registrar peso levantado en un ejercicio).
-- [ ] Integrar un sistema de logros o gamificación.
-- [ ] Subida de imágenes/videos para los ejercicios.
-- [ ] Implementar tests unitarios y de integración.
+### Autenticación
 
-## 📜 Licencia
+La autenticación se maneja a través de una cookie `HttpOnly` llamada `auth_token`. El endpoint de `login` la establece automáticamente, y el de `logout` la elimina. Las peticiones a endpoints protegidos deben incluir esta cookie.
 
-Distribuido bajo la Licencia MIT. Ver `LICENSE` para más información.
+### Resumen de Endpoints
+
+| Método | Ruta                                    | Descripción                               | Requiere Auth |
+| :----- | :-------------------------------------- | :---------------------------------------- | :-----------: |
+| `POST` | `/auth/register`                        | Registra un nuevo usuario.                |       ❌       |
+| `POST` | `/auth/login`                           | Inicia sesión y obtiene la cookie de auth.|       ❌       |
+| `POST` | `/auth/logout`                          | Cierra la sesión del usuario.             |       ❌       |
+| `GET`  | `/user`                                 | Obtiene los datos del usuario actual.     |       ✅       |
+| `PATCH`| `/user`                                 | Actualiza los datos del usuario actual.   |       ✅       |
+| `DELETE`| `/user`                                | Elimina la cuenta del usuario actual.     |       ✅       |
+| `POST` | `/routines`                             | Crea una nueva rutina.                    |       ✅       |
+| `GET`  | `/routines`                             | Lista todas las rutinas del usuario.      |       ✅       |
+| `GET`  | `/routines/:id`                         | Obtiene una rutina específica.            |       ✅       |
+| `PATCH`| `/routines/:id`                         | Actualiza una rutina específica.          |       ✅       |
+| `DELETE`| `/routines/:id`                        | Elimina una rutina específica.            |       ✅       |
+| `POST` | `/routines/:routineId/exercises`        | Crea un nuevo ejercicio en una rutina.    |       ✅       |
+| `GET`  | `/routines/:routineId/exercises`        | Lista todos los ejercicios de una rutina. |       ✅       |
+| `GET`  | `/routines/:routineId/exercises/:id`    | Obtiene un ejercicio específico.          |       ✅       |
+| `PATCH`| `/routines/:routineId/exercises/:id`    | Actualiza un ejercicio específico.        |       ✅       |
+| `DELETE`| `/routines/:routineId/exercises/:id`   | Elimina un ejercicio específico.         |       ✅       |
+
+---
+
+## 📋 Scripts Útiles
+
+| Script                | Descripción                                                     |
+| :-------------------- | :-------------------------------------------------------------- |
+| `npm run start:dev`   | Inicia la app en modo desarrollo con `watch`.                   |
+| `npm run build`       | Compila el proyecto para producción.                            |
+| `npm run start:prod`  | Inicia la app en modo producción (requiere `build`).            |
+| `npm run lint`        | Analiza el código con ESLint y corrige errores.                 |
+| `npm run format`      | Formatea el código con Prettier.                                |
+| `npm run test`        | Ejecuta las pruebas unitarias.                                  |
+| `npm run test:e2e`    | Ejecuta las pruebas end-to-end.                                 |
+| `npx prisma generate` | Genera el cliente de Prisma según tu `schema.prisma`.           |
+| `npx prisma migrate dev`| Crea y aplica nuevas migraciones de Prisma en desarrollo.       |
+
+---
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
