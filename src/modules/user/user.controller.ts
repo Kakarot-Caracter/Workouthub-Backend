@@ -17,12 +17,15 @@ export class UserController {
   }
 
   @Patch()
-  updateUser(@GetUser() user: User, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.updateUser(user.id, updateUserDto);
+  async updateUser(
+    @GetUser() user: User,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return await this.userService.updateUser(user.id, updateUserDto);
   }
 
   @Delete()
-  deleteUser(@GetUser() user: User) {
-    return this.userService.deleteUser(user.id);
+  async deleteUser(@GetUser() user: User) {
+    return await this.userService.deleteUser(user.id);
   }
 }
