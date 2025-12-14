@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -24,23 +24,36 @@ model User {
   gender         Gender?
   weeklyActivity WeeklyActivity?
   routines       Routine[]
+  diets          Diet[] // relación con Diet
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-enum Gender {
-  male
-  female
+model Diet {
+  id        Int      @id @default(autoincrement())
+  name      String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  foods     Food[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-enum WeeklyActivity {
-  LIGHT // 1–3 times a week
-  MODERATE // 3–5 times a week
-  INTENSE // 6–7 times a week
+model Food {
+  id        Int      @id @default(autoincrement())
+  name      String
+  calories  Int? // calorías aproximadas
+  protein   Float? // gramos de proteína
+  carbs     Float? // gramos de carbohidratos
+  fat       Float? // gramos de grasa
+  diet      Diet     @relation(fields: [dietId], references: [id], onDelete: Cascade)
+  dietId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-// Nuevo modelo: Routine (pertenece a un User, tiene muchos Exercise)
+// Resto de tu esquema
 model Routine {
   id          Int        @id @default(autoincrement())
   name        String
@@ -52,17 +65,26 @@ model Routine {
   updatedAt   DateTime   @updatedAt
 }
 
-// Nuevo modelo: Exercise (pertenece a una Routine)
 model Exercise {
-  id   Int    @id @default(autoincrement())
-  name String
-
+  id        Int      @id @default(autoincrement())
+  name      String
   sets      Int?
   reps      Int?
   weight    Int?
-  order     Int? // para ordenar ejercicios dentro de la rutina
+  order     Int?
   routine   Routine  @relation(fields: [routineId], references: [id], onDelete: Cascade)
   routineId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum Gender {
+  male
+  female
+}
+
+enum WeeklyActivity {
+  LIGHT
+  MODERATE
+  INTENSE
 }

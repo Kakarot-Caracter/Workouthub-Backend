@@ -1,35 +1,28 @@
-import { Controller, Post, Body, Res } from '@nestjs/common';
+import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
+import { SetAuthCookieInterceptor } from '../../common/interceptors/set-auth-cookie.interceptor';
 import { AuthService } from './auth.service';
-import { RegisterAuthDto } from './dto/register-auth.dto';
-import { Response } from 'express';
 import { LoginAuthDto } from './dto/login-auth.dto';
+import { RegisterAuthDto } from './dto/register-auth.dto';
 
+@UseInterceptors(SetAuthCookieInterceptor)
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  async register(
-    @Body() registerAuthDto: RegisterAuthDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    const user = await this.authService.register(registerAuthDto, res);
-
-    return { message: 'Registro exitoso', user };
+  async register(@Body() registerAuthDto: RegisterAuthDto) {
+    const response = await this.authService.register(registerAuthDto);
+    return { message: 'Registro exitoso', ...response };
   }
 
   @Post('login')
-  async login(
-    @Body() loginAuthDto: LoginAuthDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    const user = await this.authService.login(loginAuthDto, res);
-    return { message: 'Login exitoso', user };
+  async login(@Body() loginAuthDto: LoginAuthDto) {
+    const response = await this.authService.login(loginAuthDto);
+    return { message: 'Login exitoso', ...response };
   }
 
   @Post('logout')
-  logout(@Res({ passthrough: true }) res: Response) {
-    this.authService.logout(res);
-    return { message: 'Logout is successfully' };
+  logout() {
+    return this.authService.logout();
   }
 }

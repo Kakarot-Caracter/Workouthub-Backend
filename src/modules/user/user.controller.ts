@@ -12,20 +12,17 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  async getUser(@GetUser() user: User) {
-    return await this.userService.findOne(user.id);
+  getUser(@GetUser() user: User) {
+    return this.userService.findOne(user.id);
   }
 
   @Patch()
-  async updateUser(
-    @GetUser() user: User,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
-    return await this.userService.updateUser(user.id, updateUserDto);
+  updateUser(@GetUser() user: User, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.updateUser(user.id, updateUserDto);
   }
 
   @Delete()
-  async deleteUser(@GetUser() user: User) {
-    return await this.userService.deleteUser(user.id);
+  deleteUser(@GetUser() user: User) {
+    return this.userService.deleteUser(user.id);
   }
 }

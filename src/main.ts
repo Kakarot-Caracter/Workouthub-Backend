@@ -1,26 +1,33 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import fastifyCookie from '@fastify/cookie';
+import fastifyCors from '@fastify/cors';
 import { ValidationPipe } from '@nestjs/common';
-
-import * as cookieParser from 'cookie-parser';
-import { PrismaClientExceptionFilter } from './common/filters/prisma-exception.filter';
+import { NestFactory } from '@nestjs/core';
+import {
+  FastifyAdapter,
+  type NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AppModule } from './app.module';
+import { PrismaClientExceptionFilter } from './common/filters/prisma-exception.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter(),
+  );
 
-  app.setGlobalPrefix('api/v1/');
+  app.setGlobalPrefix('api/v1');
 
   app.useGlobalFilters(new PrismaClientExceptionFilter());
 
-  app.use(cookieParser());
-
-  app.enableCors({
+  await app.register(fastifyCors, {
     origin: 'http://localhost:3000',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
+
+  await app.register(fastifyCookie);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -34,13 +41,15 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Workouthub Documentacion.')
-    .setDescription('Workouthub es una api para gestionar entrenamientos.')
+    .setTitle('Workouthub Documentacion')
+    .setDescription('Workouthub es una api para gestionar entrenamientos')
     .setVersion('1.0')
     .build();
-  const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, documentFactory);
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
 
   await app.listen(process.env.PORT ?? 3001);
 }
+
 bootstrap();

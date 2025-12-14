@@ -11,7 +11,7 @@ import {
 import { ExercisesService } from './exercises.service';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
-
+import type { Exercise } from '@prisma/client';
 import { Auth } from 'src/common/decorators/auth.decorator';
 
 @Auth()
@@ -23,12 +23,14 @@ export class ExercisesController {
   createExercise(
     @Param('routineId', ParseIntPipe) routineId: number,
     @Body() createExerciseDto: CreateExerciseDto,
-  ) {
+  ): Promise<Exercise> {
     return this.exercisesService.createExercise(createExerciseDto, routineId);
   }
 
   @Get()
-  findAllExercises(@Param('routineId', ParseIntPipe) routineId: number) {
+  findAllExercises(
+    @Param('routineId', ParseIntPipe) routineId: number,
+  ): Promise<Exercise[]> {
     return this.exercisesService.findAllExercises(routineId);
   }
 
@@ -36,7 +38,7 @@ export class ExercisesController {
   findOneExercise(
     @Param('id', ParseIntPipe) id: number,
     @Param('routineId', ParseIntPipe) routineId: number,
-  ) {
+  ): Promise<Exercise> {
     return this.exercisesService.findOneExercise(id, routineId);
   }
 
@@ -45,15 +47,19 @@ export class ExercisesController {
     @Param('id', ParseIntPipe) id: number,
     @Param('routineId', ParseIntPipe) routineId: number,
     @Body() updateExerciseDto: UpdateExerciseDto,
-  ) {
-    return this.exercisesService.updateExercise(id, updateExerciseDto);
+  ): Promise<Exercise> {
+    return this.exercisesService.updateExercise(
+      id,
+      routineId,
+      updateExerciseDto,
+    );
   }
 
   @Delete(':id')
   removeExercise(
     @Param('id', ParseIntPipe) id: number,
     @Param('routineId', ParseIntPipe) routineId: number,
-  ) {
+  ): Promise<Exercise> {
     return this.exercisesService.removeExercise(id, routineId);
   }
 }

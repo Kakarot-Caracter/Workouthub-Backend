@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import type { Routine } from '@prisma/client';
 import { CreateRoutineDto } from './dto/create-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
 import { PrismaService } from 'src/database/prisma.service';
@@ -7,7 +8,10 @@ import { PrismaService } from 'src/database/prisma.service';
 export class RoutinesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createRoutine(createRoutineDto: CreateRoutineDto, userId: number) {
+  async createRoutine(
+    createRoutineDto: CreateRoutineDto,
+    userId: number,
+  ): Promise<Routine> {
     const newRoutine = await this.prisma.routine.create({
       data: {
         ...createRoutineDto,
@@ -17,13 +21,13 @@ export class RoutinesService {
     return newRoutine;
   }
 
-  async findAllRoutines(userId: number) {
+  async findAllRoutines(userId: number): Promise<Routine[]> {
     return this.prisma.routine.findMany({
       where: { userId },
     });
   }
 
-  async findOneRoutine(id: number, userId: number) {
+  async findOneRoutine(id: number, userId: number): Promise<Routine> {
     const routine = await this.prisma.routine.findFirst({
       where: { id, userId },
     });
@@ -35,8 +39,7 @@ export class RoutinesService {
     id: number,
     updateRoutineDto: UpdateRoutineDto,
     userId: number,
-  ) {
-    // Aseguramos que la rutina existe y pertenece al usuario
+  ): Promise<Routine> {
     const routine = await this.findOneRoutine(id, userId);
 
     return this.prisma.routine.update({
@@ -45,8 +48,7 @@ export class RoutinesService {
     });
   }
 
-  async removeRoutine(id: number, userId: number) {
-    // Aseguramos que la rutina existe y pertenece al usuario
+  async removeRoutine(id: number, userId: number): Promise<Routine> {
     const routine = await this.findOneRoutine(id, userId);
 
     return this.prisma.routine.delete({

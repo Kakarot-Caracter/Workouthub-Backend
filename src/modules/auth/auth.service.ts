@@ -3,20 +3,13 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-
-import { Response } from 'express';
-
+import { JwtService } from '@nestjs/jwt'; // Cambia import type por import regular
 import * as bcrypt from 'bcrypt';
-
-//Services
-import { PrismaService } from 'src/database/prisma.service';
-import { JwtService } from '@nestjs/jwt';
-
-//Dtos e interfaces
-import { Jwtpayload } from './interfaces/jwt.payload';
-import { LoginAuthDto } from './dto/login-auth.dto';
-import { UserService } from '../user/user.service';
+import { PrismaService } from 'src/database/prisma.service'; // Cambia import type por import regular
 import { CreateUserDto } from '../user/dto/create-user.dto';
+import { UserService } from '../user/user.service'; // Cambia import type por import regular
+import { LoginAuthDto } from './dto/login-auth.dto';
+import { Jwtpayload } from './interfaces/jwt.payload';
 
 @Injectable()
 export class AuthService {
@@ -25,17 +18,18 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly prisma: PrismaService,
   ) {}
-  async register(createUserDto: CreateUserDto, res: Response) {
-    const user = await this.userService.createUser(createUserDto);
 
+  async register(createUserDto: CreateUserDto) {
+    const user = await this.userService.createUser(createUserDto);
     const token = this.signToken({ id: user.id });
 
-    this.setCookie(res, token);
-
-    return { id: user.id, email: user.email, username: user.username };
+    return {
+      user: { id: user.id, email: user.email, username: user.username },
+      token,
+    };
   }
 
-  async login(loginAuthDto: LoginAuthDto, res: Response) {
+  async login(loginAuthDto: LoginAuthDto) {
     const user = await this.prisma.user.findUnique({
       where: { email: loginAuthDto.email },
     });
@@ -46,31 +40,20 @@ export class AuthService {
     if (!valid) throw new UnauthorizedException('Contraseña inválida.');
 
     const token = this.signToken({ id: user.id });
-    this.setCookie(res, token);
 
-    return { id: user.id, email: user.email, username: user.username };
+    return {
+      user: { id: user.id, email: user.email, username: user.username },
+      token,
+    };
   }
 
-  logout(res: Response): void {
-    res.clearCookie('auth_token', {
-      httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
-      path: '/',
-    });
+  // logout solo marca la intención; interceptor borrará la cookie
+  logout() {
+    // aquí podrías invalidar tokens en BD si usas refresh tokens etc.
+    return { message: 'Logout successfully', clearCookie: true };
   }
 
   private signToken(payload: Jwtpayload): string {
     return this.jwtService.sign(payload);
-  }
-
-  private setCookie(res: Response, token: string) {
-    res.cookie('auth_token', token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-      path: '/',
-    });
   }
 }
