@@ -8,7 +8,7 @@
 
 <p align="center">
   <img alt="NestJS" src="https://img.shields.io/badge/NestJS-11.x-red?style=for-the-badge&logo=nestjs"/>
-  <img alt="Prisma" src="https://img.shields.io/badge/Prisma-6.x-blue?style=for-the-badge&logo=prisma"/>
+  <img alt="Prisma" src="https://img.shields.io/badge/Prisma-5.x-blue?style=for-the-badge&logo=prisma"/>
   <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-blue?style=for-the-badge&logo=postgresql"/>
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.x-blue?style=for-the-badge&logo=typescript"/>
   <img alt="Docker" src="https://img.shields.io/badge/Docker-blue?style=for-the-badge&logo=docker"/>
@@ -22,6 +22,7 @@
 - **Gestión de Usuarios**: Registro, login, logout, y gestión de perfil de usuario.
 - **Gestión de Rutinas (CRUD)**: Crea, lee, actualiza y elimina rutinas por usuario.
 - **Gestión de Ejercicios (CRUD)**: Crea, lee, actualiza y elimina ejercicios dentro de una rutina.
+- **Gestión de Dietas y Alimentos (CRUD)**: Administra dietas y los alimentos asociados.
 - **Base de Datos Tipada**: Conexión segura y tipada a PostgreSQL usando Prisma ORM.
 - **Documentación Automática**: Endpoints documentados con Swagger (OpenAPI).
 - **Validación de Datos**: DTOs con `class-validator` para asegurar la integridad de los datos.
@@ -98,39 +99,18 @@ npx prisma migrate dev
 npm run start:dev
 ```
 
-¡Listo! La API estará disponible en `http://localhost:3001/api/v1` y la documentación de Swagger en `http://localhost:3001/docs`.
+¡Listo! La API estará disponible en `http://localhost:3001` y la documentación de Swagger en `http://localhost:3001/docs`.
 
 ---
 
 ## ⚙️ Uso de la API
 
-- **URL Base**: `http://localhost:3001/api/v1`
+- **URL Base**: `http://localhost:3001`
 - **Documentación Interactiva**: `http://localhost:3001/docs`
 
 ### Autenticación
 
 La autenticación se maneja a través de una cookie `HttpOnly` llamada `auth_token`. El endpoint de `login` la establece automáticamente, y el de `logout` la elimina. Las peticiones a endpoints protegidos deben incluir esta cookie.
-
-### Resumen de Endpoints
-
-| Método | Ruta                                    | Descripción                               | Requiere Auth |
-| :----- | :-------------------------------------- | :---------------------------------------- | :-----------: |
-| `POST` | `/auth/register`                        | Registra un nuevo usuario.                |       ❌       |
-| `POST` | `/auth/login`                           | Inicia sesión y obtiene la cookie de auth.|       ❌       |
-| `POST` | `/auth/logout`                          | Cierra la sesión del usuario.             |       ❌       |
-| `GET`  | `/user`                                 | Obtiene los datos del usuario actual.     |       ✅       |
-| `PATCH`| `/user`                                 | Actualiza los datos del usuario actual.   |       ✅       |
-| `DELETE`| `/user`                                | Elimina la cuenta del usuario actual.     |       ✅       |
-| `POST` | `/routines`                             | Crea una nueva rutina.                    |       ✅       |
-| `GET`  | `/routines`                             | Lista todas las rutinas del usuario.      |       ✅       |
-| `GET`  | `/routines/:id`                         | Obtiene una rutina específica.            |       ✅       |
-| `PATCH`| `/routines/:id`                         | Actualiza una rutina específica.          |       ✅       |
-| `DELETE`| `/routines/:id`                        | Elimina una rutina específica.            |       ✅       |
-| `POST` | `/routines/:routineId/exercises`        | Crea un nuevo ejercicio en una rutina.    |       ✅       |
-| `GET`  | `/routines/:routineId/exercises`        | Lista todos los ejercicios de una rutina. |       ✅       |
-| `GET`  | `/routines/:routineId/exercises/:id`    | Obtiene un ejercicio específico.          |       ✅       |
-| `PATCH`| `/routines/:routineId/exercises/:id`    | Actualiza un ejercicio específico.        |       ✅       |
-| `DELETE`| `/routines/:routineId/exercises/:id`   | Elimina un ejercicio específico.         |       ✅       |
 
 ---
 
