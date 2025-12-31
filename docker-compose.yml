@@ -18,7 +18,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      network: host # eliminar si no lo necesitas; no es común en compose
+      network: host
     container_name: workouthub-api
     restart: always
     depends_on:
