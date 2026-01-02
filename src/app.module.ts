@@ -6,6 +6,8 @@ import { RoutinesModule } from './modules/routines/routines.module';
 import { UserModule } from './modules/user/user.module';
 import { DietModule } from './modules/diets/diets.module';
 import { FoodModule } from './modules/foods/foods.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { SetAuthCookieInterceptor } from './common/interceptors/set-auth-cookie.interceptor';
 
 @Module({
   imports: [
@@ -18,6 +20,6 @@ import { FoodModule } from './modules/foods/foods.module';
     FoodModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [{ provide: APP_INTERCEPTOR, useClass: SetAuthCookieInterceptor }],
 })
 export class AppModule {}
