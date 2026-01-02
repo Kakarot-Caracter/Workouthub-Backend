@@ -16,6 +16,8 @@ async function bootstrap() {
     new FastifyAdapter(),
   );
 
+  await app.register(fastifyCookie);
+
   app.setGlobalPrefix('api/v1');
 
   app.useGlobalFilters(new PrismaClientExceptionFilter());
