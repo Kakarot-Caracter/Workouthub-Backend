@@ -13,7 +13,7 @@ const COOKIE_NAME = 'auth_token';
 const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: true,
-  sameSite: 'none' as const,
+  sameSite: 'none',
   path: '/',
   maxAge: 1000 * 60 * 60 * 24 * 7,
 };

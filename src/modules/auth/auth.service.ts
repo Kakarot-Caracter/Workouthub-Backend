@@ -3,11 +3,11 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt'; // Cambia import type por import regular
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { PrismaService } from 'src/database/prisma.service'; // Cambia import type por import regular
+import { PrismaService } from 'src/database/prisma.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
-import { UserService } from '../user/user.service'; // Cambia import type por import regular
+import { UserService } from '../user/user.service';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { Jwtpayload } from './interfaces/jwt.payload';
 
@@ -47,9 +47,7 @@ export class AuthService {
     };
   }
 
-  // logout solo marca la intención; interceptor borrará la cookie
   logout() {
-    // aquí podrías invalidar tokens en BD si usas refresh tokens etc.
     return { message: 'Logout successfully', clearCookie: true };
   }
 
