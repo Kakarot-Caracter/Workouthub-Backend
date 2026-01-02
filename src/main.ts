@@ -29,8 +29,6 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
-  await app.register(fastifyCookie);
-
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
