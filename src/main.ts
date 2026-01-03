@@ -13,7 +13,7 @@ import { PrismaClientExceptionFilter } from './common/filters/prisma-exception.f
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    new FastifyAdapter({ trustProxy: true }),
   );
 
   await app.register(fastifyCookie);
