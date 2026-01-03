@@ -1,5 +1,5 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
-import { FastifyReply } from 'fastify';
+import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
+import { SetAuthCookieInterceptor } from '../../common/interceptors/set-auth-cookie.interceptor';
 import { AuthService } from './auth.service';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { RegisterAuthDto } from './dto/register-auth.dto';
@@ -8,45 +8,25 @@ import { RegisterAuthDto } from './dto/register-auth.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  // Register NO usa interceptor, no toca cookies
   @Post('register')
   async register(@Body() registerAuthDto: RegisterAuthDto) {
     const response = await this.authService.register(registerAuthDto);
     return { message: 'Registro exitoso', ...response };
   }
 
+  // Login usa interceptor para setear cookie
   @Post('login')
-  async login(
-    @Body() loginAuthDto: LoginAuthDto,
-    @Res({ passthrough: true }) reply: FastifyReply,
-  ) {
-    const { user, token } = await this.authService.login(loginAuthDto);
-
-    const isProduction = process.env.NODE_ENV === 'production';
-
-    reply.setCookie('auth_token', token, {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
-      path: '/',
-      // IMPORTANTE: No establecer domain permite que la cookie funcione
-      // en cualquier origen que haga peticiones al backend
-      maxAge: 7 * 24 * 60 * 60,
-    });
-
-    // En el controlador, después de setCookie
-    console.log('Cookie config:', {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
-      domain: 'NO SET',
-    });
-
-    return { message: 'Login exitoso', user };
+  @UseInterceptors(SetAuthCookieInterceptor)
+  async login(@Body() loginAuthDto: LoginAuthDto) {
+    const response = await this.authService.login(loginAuthDto);
+    return { message: 'Login exitoso', ...response };
   }
 
+  // Logout usa interceptor para borrar cookie
   @Post('logout')
-  logout(@Res({ passthrough: true }) reply: FastifyReply) {
-    reply.clearCookie('auth_token', { path: '/' });
-    return { message: 'Logout exitoso' };
+  @UseInterceptors(SetAuthCookieInterceptor)
+  logout() {
+    return this.authService.logout(); // debe devolver { clearCookie: true }
   }
 }
