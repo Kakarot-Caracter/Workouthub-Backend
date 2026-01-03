@@ -10,12 +10,13 @@ import { map } from 'rxjs/operators';
 
 const COOKIE_NAME = 'auth_token';
 
+// ⚠️ Max-Age en SEGUNDOS, no milisegundos
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: true,
-  sameSite: 'none' as const,
+  secure: true, // HTTPS obligatorio
+  sameSite: 'none' as const, // cross-site cookies
   path: '/',
-  maxAge: 1000 * 60 * 60 * 24 * 7,
+  maxAge: 7 * 24 * 60 * 60, // 7 días en segundos
 };
 
 type AuthResponse =
@@ -30,6 +31,7 @@ export class SetAuthCookieInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       map((data: AuthResponse) => {
+        // ⚡ Si hay token, setea cookie
         if ('token' in data && typeof data.token === 'string') {
           reply.setCookie(COOKIE_NAME, data.token, COOKIE_OPTIONS);
 
@@ -38,13 +40,9 @@ export class SetAuthCookieInterceptor implements NestInterceptor {
           return rest;
         }
 
+        // ⚡ Si hay clearCookie, borra cookie con las mismas opciones
         if ('clearCookie' in data && data.clearCookie === true) {
-          reply.clearCookie(COOKIE_NAME, {
-            path: '/',
-            httpOnly: true,
-            secure: true,
-            sameSite: 'none',
-          });
+          reply.clearCookie(COOKIE_NAME, COOKIE_OPTIONS);
 
           const rest = { ...data };
           delete rest.clearCookie;
