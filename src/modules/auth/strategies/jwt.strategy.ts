@@ -1,9 +1,10 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
-import { Jwtpayload } from '../interfaces/jwt.payload';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/database/prisma.service';
+import { Jwtpayload } from '../interfaces/jwt.payload';
+import { FastifyRequest } from 'fastify';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -17,13 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       secretOrKey: secret,
       jwtFromRequest: ExtractJwt.fromExtractors([
-        (req: unknown) => {
-          if (typeof req === 'object' && req !== null && 'cookies' in req) {
-            return (req as { cookies: Record<string, string> }).cookies
-              .auth_token;
-          }
-          return null;
-        },
+        (req: FastifyRequest) => req?.cookies?.auth_token ?? null,
       ]),
     });
   }
@@ -32,6 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const user = await this.prisma.user.findUnique({
       where: { id: payload.id },
     });
+    if (!user) return null; // opcional: lanzar excepción si querés
     return user;
   }
 }

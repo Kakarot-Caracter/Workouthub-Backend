@@ -10,13 +10,15 @@ import { map } from 'rxjs/operators';
 
 const COOKIE_NAME = 'auth_token';
 
-// ✅ Opciones de cookie correctas para cross-site
+const isProduction = process.env.NODE_ENV === 'production';
+
+// ✅ Opciones de cookie dinámicas según el entorno
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: true, // HTTPS obligatorio
-  sameSite: 'none' as const, // cross-site
+  secure: isProduction,
+  sameSite: isProduction ? ('none' as const) : ('lax' as const),
   path: '/',
-  maxAge: 7 * 24 * 60 * 60, // 7 días en segundos
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 días en milisegundos
 };
 
 type AuthResponse =

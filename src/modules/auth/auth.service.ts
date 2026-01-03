@@ -7,8 +7,8 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/database/prisma.service';
 import { UserService } from '../user/user.service';
-import { LoginAuthDto } from './dto/login-auth.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
+import { LoginAuthDto } from './dto/login-auth.dto';
 import { Jwtpayload } from './interfaces/jwt.payload';
 
 @Injectable()
@@ -45,10 +45,6 @@ export class AuthService {
       user: { id: user.id, email: user.email, username: user.username },
       token,
     };
-  }
-
-  logout() {
-    return { message: 'Logout exitoso', clearCookie: true };
   }
 
   private signToken(payload: Jwtpayload): string {

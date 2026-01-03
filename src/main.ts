@@ -13,20 +13,36 @@ import { PrismaClientExceptionFilter } from './common/filters/prisma-exception.f
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter({ trustProxy: true }),
+    new FastifyAdapter({
+      trustProxy: true, // Para manejar proxies (Vercel, Koyeb)
+      logger: true, // Para debug
+    }),
   );
 
-  await app.register(fastifyCookie);
+  // Cookies firmadas opcionalmente
+  await app.register(fastifyCookie, {
+    secret: process.env.COOKIE_SECRET || 'supersecret',
+  });
 
   app.setGlobalPrefix('api/v1');
 
   app.useGlobalFilters(new PrismaClientExceptionFilter());
 
   await app.register(fastifyCors, {
-    origin: 'https://workouthub-frontend.vercel.app',
+    origin: [
+      'https://workouthub-frontend.vercel.app',
+      process.env.FRONTEND_DEV_URL ?? 'http://localhost:5173',
+      'http://localhost:3000',
+    ],
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: [
+      'Origin',
+      'X-Requested-With',
+      'Content-Type',
+      'Accept',
+      'Authorization',
+    ],
   });
 
   app.useGlobalPipes(
@@ -34,9 +50,7 @@ async function bootstrap() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
-      transformOptions: {
-        enableImplicitConversion: true,
-      },
+      transformOptions: { enableImplicitConversion: true },
     }),
   );
 
