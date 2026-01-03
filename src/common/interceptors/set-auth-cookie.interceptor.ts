@@ -1,20 +1,20 @@
 import {
-  type CallHandler,
-  type ExecutionContext,
   Injectable,
-  type NestInterceptor,
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
 } from '@nestjs/common';
 import type { FastifyReply } from 'fastify';
-import type { Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 const COOKIE_NAME = 'auth_token';
 
-// ⚠️ Max-Age en SEGUNDOS, no milisegundos
+// ✅ Opciones de cookie correctas para cross-site
 const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: true, // HTTPS obligatorio
-  sameSite: 'none' as const, // cross-site cookies
+  sameSite: 'none' as const, // cross-site
   path: '/',
   maxAge: 7 * 24 * 60 * 60, // 7 días en segundos
 };
