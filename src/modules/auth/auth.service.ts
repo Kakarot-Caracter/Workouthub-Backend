@@ -1,3 +1,4 @@
+// src/auth/auth.service.ts
 import {
   BadRequestException,
   Injectable,
@@ -47,11 +48,9 @@ export class AuthService {
     };
   }
 
-  logout() {
-    return { message: 'Logout exitoso', clearCookie: true };
-  }
-
   private signToken(payload: Jwtpayload): string {
-    return this.jwtService.sign(payload);
+    return this.jwtService.sign(payload, {
+      expiresIn: '7d', // opcional: expira en 1 día
+    });
   }
 }
