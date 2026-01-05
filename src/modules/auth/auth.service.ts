@@ -1,4 +1,3 @@
-// src/auth/auth.service.ts
 import {
   BadRequestException,
   Injectable,
@@ -22,6 +21,7 @@ export class AuthService {
 
   async register(createUserDto: CreateUserDto) {
     const user = await this.userService.createUser(createUserDto);
+
     const token = this.signToken({ id: user.id });
 
     return {
@@ -48,9 +48,21 @@ export class AuthService {
     };
   }
 
+  async getUserById(id: number) {
+    return this.prisma.user.findUnique({ where: { id } });
+  }
+
+  verifyToken(token: string) {
+    try {
+      return this.jwtService.verify<Jwtpayload>(token);
+    } catch (e) {
+      throw new UnauthorizedException('Token inválido');
+    }
+  }
+
   private signToken(payload: Jwtpayload): string {
     return this.jwtService.sign(payload, {
-      expiresIn: '7d', // opcional: expira en 1 día
+      expiresIn: '7d',
     });
   }
 }
