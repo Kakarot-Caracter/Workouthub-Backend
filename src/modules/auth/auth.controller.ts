@@ -20,11 +20,11 @@ export class AuthController {
     reply
       .setCookie('token', token, {
         httpOnly: true,
-        secure: isProd, // HTTPS en producción
-        sameSite: 'none', // requerido para cross-site
+        secure: isProd,
+        sameSite: 'none',
         path: '/',
         expires: new Date(Date.now() + oneDayMs),
-        maxAge: 24 * 60 * 60, // en segundos
+        maxAge: 24 * 60 * 60,
       })
       .status(201)
       .send({ message: 'Registro exitoso', user });
