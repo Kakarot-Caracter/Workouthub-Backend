@@ -8,7 +8,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { PrismaModule } from 'src/database/prisma.module';
 import { UserModule } from '../user/user.module';
-import { MailService } from '../mail/mail.service';
+
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
@@ -24,9 +25,10 @@ import { MailService } from '../mail/mail.service';
       }),
     }),
     UserModule,
+    MailModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, MailService],
+  providers: [AuthService, JwtStrategy],
   exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}
