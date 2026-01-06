@@ -11,99 +11,40 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { AuthService } from './auth.service';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { RegisterAuthDto } from './dto/register-auth.dto';
-import { MailService } from '../mail/mail.service';
-import { ForgotPasswordDto, ResetPasswordDto } from './dto/forgot-password.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly mailService: MailService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('register')
   async register(@Body() dto: RegisterAuthDto, @Res() reply: FastifyReply) {
     const { user, token } = await this.authService.register(dto);
 
-    const isProd = process.env.NODE_ENV === 'production';
-    const oneDaySeconds = 24 * 60 * 60;
-
-    reply
-      .setCookie('token', token, {
-        httpOnly: true,
-        secure: isProd,
-        sameSite: 'none',
-        domain: '.vercel.app',
-        path: '/',
-        maxAge: oneDaySeconds,
-        expires: new Date(Date.now() + oneDaySeconds * 1000),
-      })
-      .status(201)
-      .send({ message: 'Registro exitoso', user });
+    reply.status(201).send({ message: 'Registro exitoso', user, token });
   }
 
   @Post('login')
   async login(@Body() dto: LoginAuthDto, @Res() reply: FastifyReply) {
     const { user, token } = await this.authService.login(dto);
 
-    const isProd = process.env.NODE_ENV === 'production';
-    const oneDaySeconds = 24 * 60 * 60;
-
-    reply
-      .setCookie('token', token, {
-        httpOnly: true,
-        secure: isProd,
-        sameSite: 'none',
-        domain: '.vercel.app',
-        path: '/',
-        maxAge: oneDaySeconds,
-        expires: new Date(Date.now() + oneDaySeconds * 1000),
-      })
-      .status(200)
-      .send({ message: 'Login exitoso', user });
+    reply.status(200).send({ message: 'Login exitoso', user, token });
   }
 
   @Post('logout')
   logout(@Res() reply: FastifyReply) {
-    const isProd = process.env.NODE_ENV === 'production';
-    reply
-      .clearCookie('token', {
-        path: '/',
-        sameSite: 'none',
-        domain: '.vercel.app',
-        secure: isProd,
-      })
-      .status(200)
-      .send({ message: 'Logout exitoso' });
+    reply.status(200).send({ message: 'Logout exitoso' });
   }
 
   @Get('me')
   async me(@Req() req: FastifyRequest) {
-    const token = req.cookies?.token;
-    if (!token) throw new UnauthorizedException('No auth token');
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) throw new UnauthorizedException('No auth token');
 
+    const token = authHeader.split(' ')[1];
     const payload = this.authService.verifyToken(token);
     const user = await this.authService.getUserById(payload.id);
     if (!user) throw new UnauthorizedException();
 
-    return {
-      id: user.id,
-      email: user.email,
-      username: user.username,
-    };
-  }
-  @Post('forgot-password')
-  async forgot(@Body() dto: ForgotPasswordDto) {
-    const token = await this.authService.generateResetToken(dto.email);
-    const link = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
-
-    await this.mailService.sendResetPasswordEmail(dto.email, link);
-    return { message: 'Email de reseteo enviado' };
-  }
-
-  @Post('reset-password')
-  async reset(@Body() dto: ResetPasswordDto) {
-    await this.authService.resetPassword(dto.token, dto.newPassword);
-    return { message: 'Contraseña actualizada correctamente' };
+    return { id: user.id, username: user.username, email: user.email };
   }
 }
