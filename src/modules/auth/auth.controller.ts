@@ -33,6 +33,7 @@ export class AuthController {
         httpOnly: true,
         secure: isProd,
         sameSite: 'none',
+        domain: '.vercel.app',
         path: '/',
         maxAge: oneDaySeconds,
         expires: new Date(Date.now() + oneDaySeconds * 1000),
@@ -53,6 +54,7 @@ export class AuthController {
         httpOnly: true,
         secure: isProd,
         sameSite: 'none',
+        domain: '.vercel.app',
         path: '/',
         maxAge: oneDaySeconds,
         expires: new Date(Date.now() + oneDaySeconds * 1000),
@@ -68,6 +70,7 @@ export class AuthController {
       .clearCookie('token', {
         path: '/',
         sameSite: 'none',
+        domain: '.vercel.app',
         secure: isProd,
       })
       .status(200)
