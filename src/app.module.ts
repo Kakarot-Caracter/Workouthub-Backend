@@ -6,6 +6,7 @@ import { RoutinesModule } from './modules/routines/routines.module';
 import { UserModule } from './modules/user/user.module';
 import { DietModule } from './modules/diets/diets.module';
 import { FoodModule } from './modules/foods/foods.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { FoodModule } from './modules/foods/foods.module';
     DietModule,
     UserModule,
     FoodModule,
+    MailerModule,
   ],
   controllers: [],
 })

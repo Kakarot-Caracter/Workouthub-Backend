@@ -19,7 +19,10 @@ model User {
   gender         Gender?
   weeklyActivity WeeklyActivity?
   routines       Routine[]
-  diets          Diet[] // relación con Diet
+  diets          Diet[]
+
+  resetToken        String?
+  resetTokenExpires DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

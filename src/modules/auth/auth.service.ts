@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -10,6 +11,7 @@ import { UserService } from '../user/user.service';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { Jwtpayload } from './interfaces/jwt.payload';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -52,10 +54,45 @@ export class AuthService {
     return this.prisma.user.findUnique({ where: { id } });
   }
 
+  async generateResetToken(email: string): Promise<string> {
+    const user = await this.prisma.user.findUnique({ where: { email } });
+    if (!user) throw new NotFoundException('Email no registrado');
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const expires = new Date(Date.now() + 1000 * 60 * 60); // 1 hora
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { resetToken: token, resetTokenExpires: expires },
+    });
+
+    return token;
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<void> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        resetToken: token,
+        resetTokenExpires: { gt: new Date() },
+      },
+    });
+    if (!user) throw new BadRequestException('Token inválido o expirado');
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        password: hashed,
+        resetToken: null,
+        resetTokenExpires: null,
+      },
+    });
+  }
+
   verifyToken(token: string) {
     try {
       return this.jwtService.verify<Jwtpayload>(token);
-    } catch (e) {
+    } catch {
       throw new UnauthorizedException('Token inválido');
     }
   }

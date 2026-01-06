@@ -11,10 +11,15 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { AuthService } from './auth.service';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { RegisterAuthDto } from './dto/register-auth.dto';
+import { MailService } from '../mail/mail.service';
+import { ForgotPasswordDto, ResetPasswordDto } from './dto/forgot-password.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly mailService: MailService,
+  ) {}
 
   @Post('register')
   async register(@Body() dto: RegisterAuthDto, @Res() reply: FastifyReply) {
@@ -83,5 +88,19 @@ export class AuthController {
       email: user.email,
       username: user.username,
     };
+  }
+  @Post('forgot-password')
+  async forgot(@Body() dto: ForgotPasswordDto) {
+    const token = await this.authService.generateResetToken(dto.email);
+    const link = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+
+    await this.mailService.sendResetPasswordEmail(dto.email, link);
+    return { message: 'Email de reseteo enviado' };
+  }
+
+  @Post('reset-password')
+  async reset(@Body() dto: ResetPasswordDto) {
+    await this.authService.resetPassword(dto.token, dto.newPassword);
+    return { message: 'Contraseña actualizada correctamente' };
   }
 }
