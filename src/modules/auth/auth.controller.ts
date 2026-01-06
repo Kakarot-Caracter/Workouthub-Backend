@@ -33,7 +33,9 @@ export class AuthController {
         httpOnly: true,
         secure: isProd,
         sameSite: 'none',
+        domain: '.vercel.app',
         path: '/',
+
         maxAge: oneDaySeconds,
         expires: new Date(Date.now() + oneDaySeconds * 1000),
       })
@@ -53,6 +55,7 @@ export class AuthController {
         httpOnly: true,
         secure: isProd,
         sameSite: 'none',
+        domain: '.vercel.app',
         path: '/',
         maxAge: oneDaySeconds,
         expires: new Date(Date.now() + oneDaySeconds * 1000),
@@ -69,6 +72,7 @@ export class AuthController {
         path: '/',
         sameSite: 'none',
         secure: isProd,
+        domain: '.vercel.app',
       })
       .status(200)
       .send({ message: 'Logout exitoso' });
