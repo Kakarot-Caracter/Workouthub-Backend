@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int             @id @default(autoincrement())
+  username       String
+  email          String          @unique
+  password       String
+  height         Int?
+  age            Int?
+  weight         Int?
+  gender         Gender?
+  weeklyActivity WeeklyActivity?
+  routines       Routine[]
+  diets          Diet[]
+
+  resetToken        String?
+  resetTokenExpires DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Diet {
+  id        Int      @id @default(autoincrement())
+  name      String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  foods     Food[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Food {
+  id        Int      @id @default(autoincrement())
+  name      String
+  calories  Int? // calorías aproximadas
+  protein   Float? // gramos de proteína
+  carbs     Float? // gramos de carbohidratos
+  fat       Float? // gramos de grasa
+  diet      Diet     @relation(fields: [dietId], references: [id], onDelete: Cascade)
+  dietId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Resto de tu esquema
+model Routine {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  exercises   Exercise[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Exercise {
+  id        Int      @id @default(autoincrement())
+  name      String
+  sets      Int?
+  reps      Int?
+  weight    Int?
+  order     Int?
+  routine   Routine  @relation(fields: [routineId], references: [id], onDelete: Cascade)
+  routineId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Gender {
+  male
+  female
+}
+
+enum WeeklyActivity {
+  LIGHT
+  MODERATE
+  INTENSE
+}

@@ -25,19 +25,13 @@ export class AuthController {
   async register(@Body() dto: RegisterAuthDto, @Res() reply: FastifyReply) {
     const { user, token } = await this.authService.register(dto);
 
-    const isProd = process.env.NODE_ENV === 'production';
-    const oneDaySeconds = 24 * 60 * 60;
-
     reply
       .setCookie('token', token, {
         httpOnly: true,
-        secure: isProd,
-        sameSite: 'none',
-        domain: '.vercel.app',
+        secure: false,
+        sameSite: 'lax',
         path: '/',
-
-        maxAge: oneDaySeconds,
-        expires: new Date(Date.now() + oneDaySeconds * 1000),
+        maxAge: 24 * 60 * 60,
       })
       .status(201)
       .send({ message: 'Registro exitoso', user });
@@ -47,18 +41,13 @@ export class AuthController {
   async login(@Body() dto: LoginAuthDto, @Res() reply: FastifyReply) {
     const { user, token } = await this.authService.login(dto);
 
-    const isProd = process.env.NODE_ENV === 'production';
-    const oneDaySeconds = 24 * 60 * 60;
-
     reply
       .setCookie('token', token, {
         httpOnly: true,
-        secure: isProd,
-        sameSite: 'none',
-        domain: '.vercel.app',
+        secure: false,
+        sameSite: 'lax',
         path: '/',
-        maxAge: oneDaySeconds,
-        expires: new Date(Date.now() + oneDaySeconds * 1000),
+        maxAge: 24 * 60 * 60,
       })
       .status(200)
       .send({ message: 'Login exitoso', user });
@@ -66,13 +55,9 @@ export class AuthController {
 
   @Post('logout')
   logout(@Res() reply: FastifyReply) {
-    const isProd = process.env.NODE_ENV === 'production';
     reply
       .clearCookie('token', {
         path: '/',
-        sameSite: 'none',
-        secure: isProd,
-        domain: '.vercel.app',
       })
       .status(200)
       .send({ message: 'Logout exitoso' });
@@ -93,6 +78,7 @@ export class AuthController {
       username: user.username,
     };
   }
+
   @Post('forgot-password')
   async forgot(@Body() dto: ForgotPasswordDto) {
     const token = await this.authService.generateResetToken(dto.email);
