@@ -59,7 +59,7 @@ export class AuthService {
     if (!user) throw new NotFoundException('Email no registrado');
 
     const token = crypto.randomBytes(32).toString('hex');
-    const expires = new Date(Date.now() + 1000 * 60 * 60); // 1 hora
+    const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
 
     await this.prisma.user.update({
       where: { id: user.id },
