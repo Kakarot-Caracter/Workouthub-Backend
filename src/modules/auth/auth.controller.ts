@@ -28,10 +28,11 @@ export class AuthController {
     reply
       .setCookie('token', token, {
         httpOnly: true,
-        secure: false,
-        sameSite: 'lax',
+        secure: true,
+        sameSite: 'none',
+        domain: '.workouthub.com',
         path: '/',
-        maxAge: 24 * 60 * 60,
+        maxAge: 60 * 60 * 24 * 7,
       })
       .status(201)
       .send({ message: 'Registro exitoso', user });
@@ -44,10 +45,11 @@ export class AuthController {
     reply
       .setCookie('token', token, {
         httpOnly: true,
-        secure: false,
-        sameSite: 'lax',
+        secure: true,
+        sameSite: 'none',
+        domain: '.workouthub.com',
         path: '/',
-        maxAge: 24 * 60 * 60,
+        maxAge: 60 * 60 * 24 * 7,
       })
       .status(200)
       .send({ message: 'Login exitoso', user });
