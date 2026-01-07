@@ -30,7 +30,7 @@ export class AuthController {
         httpOnly: true,
         secure: true,
         sameSite: 'none',
-        domain: '.vercel.app',
+
         path: '/',
         maxAge: 60 * 60 * 24 * 7,
       })
@@ -47,7 +47,7 @@ export class AuthController {
         httpOnly: true,
         secure: true,
         sameSite: 'none',
-        domain: '.vercel.app',
+
         path: '/',
         maxAge: 60 * 60 * 24 * 7,
       })
