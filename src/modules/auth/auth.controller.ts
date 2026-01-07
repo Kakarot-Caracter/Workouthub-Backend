@@ -59,8 +59,12 @@ export class AuthController {
   logout(@Res() reply: FastifyReply) {
     reply
       .clearCookie('token', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
         path: '/',
       })
+
       .status(200)
       .send({ message: 'Logout exitoso' });
   }
