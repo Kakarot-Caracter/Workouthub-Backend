@@ -17,7 +17,7 @@ async function bootstrap() {
   );
 
   await app.register(fastifyCors, {
-    origin: 'https://workouthub-frontend.vercel.app/',
+    origin: 'https://workouthub-frontend.vercel.app',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
