@@ -16,18 +16,18 @@ async function bootstrap() {
     new FastifyAdapter({ trustProxy: true }),
   );
 
+  await app.register(fastifyCors, {
+    origin: 'https://workouthub-frontend.vercel.app/',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
+
   await app.register(fastifyCookie);
 
   app.setGlobalPrefix('api/v1');
 
   app.useGlobalFilters(new PrismaClientExceptionFilter());
-
-  await app.register(fastifyCors, {
-    origin: 'https://workouthub-frontend.vercel.app',
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  });
 
   app.useGlobalPipes(
     new ValidationPipe({
